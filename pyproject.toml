@@ -1,0 +1,36 @@
+[project]
+name = "era_dts"
+version = "0.1"
+description = "Code for Numerical Experiments in 'Adaptive Reduced Order Modelling of Discrete-time Systems with Input-Output Dead Time'"
+readme = "README.md"
+license = "MIT"
+license-file = ["LICENSE"]
+authors = [
+    { name = "Art J. R. Pelling", email = "a.pelling@tu-berlin.de" }
+]
+requires-python = ">=3.12,<3.13"
+dependencies = [
+  "h5py>=3.12.1",
+  "numba==0.61.2",
+  "numpy==2.2.4",
+  "pooch==1.8.2",
+  "pymor@git+https://github.com/pymor/pymor.git@614767f23438e3be8c2e0530d764f345c9b3cdab",
+  "rocket-fft==0.2.5",
+  "scipy>=1.14.1",
+  "tbb==2022.1.0",
+  "tqdm",
+]
+
+[project.scripts]
+run-benchmark = "era_dts.benchmark:run"
+txt4pgf = "era_dts.plots:create_txt4pgf"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.uv.sources]
+pymor = { git = "https://github.com/pymor/pymor.git", rev = "614767f23438e3be8c2e0530d764f345c9b3cdab"}
