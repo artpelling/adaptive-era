@@ -4,8 +4,8 @@ import numpy as np
 from pathlib import Path
 
 from era_dts.downloader import fetch_data
-from era_dts.dead_time_extraction import split_delays
-from era_dts.utils import estimate_delays
+from era_dts.dead_time_extraction import split_dead_times
+from era_dts.utils import estimate_dead_times
 
 
 model_dir = Path('models')
@@ -24,13 +24,14 @@ def export_txt(dataset, path):
     orders = np.load(path / 'orders.npy')
     dofs = (orders+m)*(orders+p)
     if case in ('LC', 'DTS'):
-        d = estimate_delays(data['rpos'], data['spos'], 343, fs, subsample=False)
+        d = estimate_dead_times(data['rpos'], data['spos'], 343, fs, subsample=False)
         if case == 'LC':
             dofs += min(m,p)*np.min(d)
         else:
-            do, di = split_delays(d, subsample=True)
+            do, di = split_dead_times(d, subsample=True)
             dofs += (np.sum(do) + np.sum(di)).astype(int)
     irnorm = (np.load(path / 'err_true.npy')/np.load(path / 'err_relative.npy'))[0]
+    print(scenario, irnorm)
     err_rel = 20*np.log10(np.load(path / 'err_relative.npy'))
     kung = np.load(path / 'err_kung.npy')
     kung_new = 20*np.log10(kung)

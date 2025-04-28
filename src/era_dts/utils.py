@@ -7,24 +7,24 @@ from scipy.spatial.distance import cdist
 from tqdm import tqdm
 
 
-def estimate_delays(spos, rpos, c0, fs, subsample=False):
+def estimate_dead_times(spos, rpos, c0, fs, subsample=False):
     d = cdist(spos, rpos)/c0*fs
     if not subsample:
         d = d.astype(int)
     return d
 
 
-def apply_delays(ir, delays):
+def apply_dead_times(ir, dead_times):
     irm = np.zeros_like(ir)
     p, m = ir.shape[1:]
     for i in range(p):
         for j in range(m):
-            if delays[i, j] == 0:
+            if dead_times[i, j] == 0:
                 irm[:, i, j] = ir[:, i, j]
-            if delays[i, j] > 1:
-                irm[delays[i, j]:, i, j] = ir[:-delays[i, j], i, j]
+            if dead_times[i, j] > 1:
+                irm[dead_times[i, j]:, i, j] = ir[:-dead_times[i, j], i, j]
             else:
-                irm[:delays[i, j], i, j] = ir[-delays[i, j]:, i, j]
+                irm[:dead_times[i, j], i, j] = ir[-dead_times[i, j]:, i, j]
     return irm
 
 

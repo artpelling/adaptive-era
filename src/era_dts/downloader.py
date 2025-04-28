@@ -105,7 +105,7 @@ def process_mird(infile, outfile):
     rpos[:, 2] = height
     ir = ir.T
     # The IRs contain an additional dead time not explained by the source-receiver distance.
-    # It is probably due to delay in the measurement setup.
+    # It is probably due to dead time in the measurement setup.
     # We compensate this by offsetting the IRs such that the offset plus the minimal geometric dead time equals 750.
     # The removal of 750 samples is done in several other papers using this dataset.
     offset = 629

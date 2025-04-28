@@ -4,10 +4,10 @@ import numpy as np
 import scipy.sparse as sps
 import scipy.optimize as spo
 
-from era_dts.utils import estimate_delays, apply_delays
+from era_dts.utils import estimate_dead_times, apply_dead_times
 
 
-def split_delays(deltas, subsample=False):
+def split_dead_times(deltas, subsample=False):
     # construct A matrix for linear program
     p, m = deltas.shape
     A = sps.lil_array((m*p, m+p))
@@ -42,10 +42,10 @@ def split_delays(deltas, subsample=False):
 def extract_dead_times(ir, rpos, spos, fs, method):
     if method == 'NONE':
         return ir
-    d = estimate_delays(rpos, spos, 343, fs, subsample=False)
+    d = estimate_dead_times(rpos, spos, 343, fs, subsample=False)
     if method == 'LC':
         dest = np.ones_like(d)*np.min(d)
     elif method == 'DTS':
-        do, di = split_delays(d, subsample=True)
+        do, di = split_dead_times(d, subsample=True)
         dest = np.add.outer(do, di)
-    return apply_delays(ir, -dest.astype(int))
+    return apply_dead_times(ir, -dest.astype(int))
