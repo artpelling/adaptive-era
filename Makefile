@@ -20,7 +20,7 @@ $(addsuffix /log.txt, $(addprefix models/, $(TARGETS))):
 
 ERR_BENCH = $(foreach t, $(SMALL), $(addprefix $t-, DTS))
 MOD_BENCH = $(foreach t, $(ALL), $(addprefix $t-, DTS))
-DTE_BENCH = $(foreach t, $(SMALL) MIRACLE/A1_RED MIRACLE/A2_RED, $(addprefix $t-, $(DTE)))
+DTE_BENCH = $(foreach t, $(SMALL) MIRACLE/A1_RED MIRACLE/A2_RED MIRD/MID3 MIRD/LONG3, $(addprefix $t-, $(DTE)))
 
 error-bench: $(ERR_BENCH)
 model-bench: $(MOD_BENCH)
