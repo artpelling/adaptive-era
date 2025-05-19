@@ -124,7 +124,7 @@ def fetch_data(dataset, scenario):
 
     data = dict(np.load(path))
 
-    if dataset == 'MIRACLE' and scenario.endswith('_RED'):
+    if dataset == 'MIRACLE' and scenario.endswith('-C1'):
         print('Subselecting a coarser grid (a quarter of the source locations).')
         idx = np.arange(4096).reshape(64, 64)[::2, ::2].reshape(1024)
         data['ir'] = data['ir'][..., idx]

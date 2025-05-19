@@ -12,7 +12,7 @@ scenario_parsers = parser.add_subparsers(dest='dataset', description='The datase
 miracle_parser = scenario_parsers.add_parser('MIRACLE', help='Microphone Array Impulse Repsonse Database for Acoustic Learning.')
 mird_parser = scenario_parsers.add_parser('MIRD', help='Multi-Channel Impulse Response Database.')
 
-miracle_parser.add_argument('-s', '--scenario', choices=['D1', 'A1', 'A1_RED', 'A2', 'A2_RED', 'R2', 'R2_RED'], type=str.upper, help='The scenario to consider.')
+miracle_parser.add_argument('-s', '--scenario', choices=['D1', 'A1', 'A1-C1', 'A2', 'A2-C1', 'R2', 'R2-C1'], type=str.upper, help='The scenario to consider.')
 mird_parser.add_argument('-s', '--scenario', choices=['SHORT3', 'MID3', 'LONG3', 'SHORT4', 'MID4', 'LONG4', 'SHORT8', 'MID8', 'LONG8'], type=str.upper, help='The scenario to consider. SHORT MID LONG refers to the different T60s, the last digit refers to the inter-microphone spacings of the microphone array.')
 
 args = parser.parse_args()

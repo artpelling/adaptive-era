@@ -7,7 +7,7 @@ getscenario = $(word 1, $(subst -, ,$(word 3,$(subst /, ,$@))))
 getdte = $(word 1, $(subst /, ,$(word 2,$(subst -, ,$@))))
 
 SMALL = MIRACLE/D1 MIRD/SHORT3
-ALL = $(foreach t, MIRACLE, $(addprefix $t/, D1 A1 A1_RED A2 A2_RED R2 R2_RED)) $(foreach t, MIRD, $(addprefix $t/, SHORT3 MID3 LONG3))
+ALL = $(foreach t, MIRACLE, $(addprefix $t/, D1 A1-C1 A2-C1 R2-C1)) $(foreach t, MIRD, $(addprefix $t/, SHORT3 MID3 LONG3))
 DTE = NONE LC DTS
 
 TARGETS = $(foreach t, $(ALL), $(addprefix $t-, $(DTE)))
@@ -20,7 +20,7 @@ $(addsuffix /log.txt, $(addprefix models/, $(TARGETS))):
 
 ERR_BENCH = $(foreach t, $(SMALL), $(addprefix $t-, DTS))
 MOD_BENCH = $(foreach t, $(ALL), $(addprefix $t-, DTS))
-DTE_BENCH = $(foreach t, $(SMALL) MIRACLE/A1_RED MIRACLE/A2_RED MIRD/MID3 MIRD/LONG3, $(addprefix $t-, $(DTE)))
+DTE_BENCH = $(foreach t, $(ALL), $(addprefix $t-, $(DTE)))
 
 error-bench: $(ERR_BENCH)
 model-bench: $(MOD_BENCH)
