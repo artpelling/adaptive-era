@@ -1,12 +1,12 @@
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15586170.svg)](https://doi.org/10.5281/zenodo.15586170)
 ![Python Version from PEP 621 TOML](https://img.shields.io/python/required-version-toml?tomlFilePath=https%3A%2F%2Fraw.githubusercontent.com%2Fartpelling%2Fadaptive-era%2Frefs%2Fheads%2Fmain%2Fpyproject.toml)
 
-# Code for Numerical Experiments in "Adaptive Reduced Order Modelling of Discrete-time Systems with Input-Output Dead Time"
+# Code for Numerical Experiments in "Adaptive Reduced Order Modelling of Discrete-Time Systems with Input-Output Dead Time"
 
 This repository contains code for numerical experiments reported in
 
 > Art J. R. Pelling, Ennes Sarradj
-> **Adaptive Reduced Order Modelling of Discrete-time Systems with Input-Output Dead Time**,
+> **Adaptive Reduced Order Modelling of Discrete-Time Systems with Input-Output Dead Time**,
 > [*arXiv preprint*](https://arxiv.org/abs/OUT.SOON),
 > 2025
 
