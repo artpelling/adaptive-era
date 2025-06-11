@@ -7,7 +7,7 @@ This repository contains code for numerical experiments reported in
 
 > Art J. R. Pelling, Ennes Sarradj
 > **Adaptive Reduced Order Modelling of Discrete-Time Systems with Input-Output Dead Time**,
-> [*arXiv preprint*](https://arxiv.org/abs/OUT.SOON),
+> [*arXiv preprint*](https://doi.org/10.48550/arXiv.2506.08870),
 > 2025
 
 ## Installation
