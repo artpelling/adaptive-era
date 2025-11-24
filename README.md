@@ -1,14 +1,14 @@
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15586170.svg)](https://doi.org/10.5281/zenodo.15586170)
 ![Python Version from PEP 621 TOML](https://img.shields.io/python/required-version-toml?tomlFilePath=https%3A%2F%2Fraw.githubusercontent.com%2Fartpelling%2Fadaptive-era%2Frefs%2Fheads%2Fmain%2Fpyproject.toml)
 
-# Code for Numerical Experiments in "Adaptive Reduced Order Modelling of Discrete-Time Systems with Input-Output Dead Time"
+# Code for Numerical Experiments in "Adaptive Reduced Order Modelling of Acoustic LTI Systems with Input-Output Dead Time"
 
 This repository contains code for numerical experiments reported in
 
 > Art J. R. Pelling, Ennes Sarradj
-> **Adaptive Reduced Order Modelling of Discrete-Time Systems with Input-Output Dead Time**,
-> [*arXiv preprint*](https://doi.org/10.48550/arXiv.2506.08870),
-> 2025
+> **Adaptive Reduced Order Modelling of Acoustic LTI Systems with Input-Output Dead Time**,
+> Mechanical Systems and Signal Processing 242 (January 2026): 113116.
+> [doi:10.1016/j.ymssp.2025.113613](https://doi.org/10.1016/j.ymssp.2025.113613).
 
 ## Installation
 
