@@ -14,7 +14,7 @@ dependencies = [
   "numba==0.61.2",
   "numpy==2.2.4",
   "pooch==1.8.2",
-  "pymor@git+https://github.com/pymor/pymor.git@614767f23438e3be8c2e0530d764f345c9b3cdab",
+  "pymor@git+https://github.com/pymor/pymor.git@6d2c9fdf4326368ef3a1e6131f119ff12c203833",
   "rocket-fft==0.2.5",
   "scipy>=1.14.1",
   "tbb==2022.1.0",
@@ -32,5 +32,11 @@ build-backend = "hatchling.build"
 [tool.hatch.metadata]
 allow-direct-references = true
 
+
+[tool.basedpyright]
+venv = ".venv"
+typeCheckingMode = 'off'
+
+
 [tool.uv.sources]
-pymor = { git = "https://github.com/pymor/pymor.git", rev = "614767f23438e3be8c2e0530d764f345c9b3cdab"}
+pymor = { git = "https://github.com/pymor/pymor.git", rev = "6d2c9fdf4326368ef3a1e6131f119ff12c203833"}
