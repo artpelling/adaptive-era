@@ -61,7 +61,7 @@ class NumbaCirculantOperator(NumpyCirculantOperator):
 
 
 class NumbaHankelOperator(NumpyHankelOperator):
-    def __init__(self, c, r=None, name=None):
+    def __init__(self, c, r=None, solver=None, name=None):
         super().__init__(c, r=r, name=name)
         k, l = self.c.shape[0], self.r.shape[0]
         n = k + l - 1
@@ -70,7 +70,7 @@ class NumbaHankelOperator(NumpyHankelOperator):
         h = np.concatenate((self.c, self.r[1:], np.zeros([z, *self.c.shape[1:]], dtype=c.dtype)))
         shift = n // 2 + int(np.ceil((k - l) / 2)) + (n % 2) + z # this works
         self._circulant = NumbaCirculantOperator(
-            np.roll(h, shift, axis=0), name=self.name + ' (implicit circulant)')
+            np.roll(h, shift, axis=0), solver=solver, name=self.name + ' (implicit circulant)')
 
     def to_scipy_linear_operator(self):
         def matvec(x):
