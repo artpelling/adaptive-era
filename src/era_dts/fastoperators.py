@@ -13,8 +13,8 @@ class NumbaCirculantOperator(NumpyCirculantOperator):
     @staticmethod
     @nb.njit(
         [
-            nb.float32[::1, :](nb.int64, nb.int64, nb.int64, nb.int64, nb.float32[:, ::1], nb.float32[:, ::1], nb.complex64[:, :, ::1]),
-            nb.float64[::1, :](nb.int64, nb.int64, nb.int64, nb.int64, nb.float64[:, ::1], nb.float64[:, ::1], nb.complex128[:, :, ::1])
+            nb.float32[:, ::1](nb.int64, nb.int64, nb.int64, nb.int64, nb.float32[:, ::1], nb.float32[:, ::1], nb.complex64[:, :, ::1]),
+            nb.float64[:, ::1](nb.int64, nb.int64, nb.int64, nb.int64, nb.float64[:, ::1], nb.float64[:, ::1], nb.complex128[:, :, ::1])
         ],
         parallel=True,
         fastmath=True
@@ -29,7 +29,7 @@ class NumbaCirculantOperator(NumpyCirculantOperator):
                 # setting n=n below is necessary to allow uneven lengths but considerably slower
                 # Hankel operator will always pad to even length to avoid that
                 y[i::p] += irfft(Y, n=n, axis=0)[:dim]
-        return y.T
+        return y
 
     @staticmethod
     def _complex_ops(m, p, n, d, vec, y, C):
@@ -40,7 +40,7 @@ class NumbaCirculantOperator(NumpyCirculantOperator):
                 Y = X*C[:, i, j].reshape(-1, 1)
                 Y = ifft(Y, axis=0, overwrite_x=True)
                 y[i::p] += Y[:d // p]
-        return y.T
+        return y
 
     def _circular_matvec(self, vec):
         n, p, m = self._arr.shape

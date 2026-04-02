@@ -30,9 +30,9 @@ class RandomizedERAReductor(pyMORRandomizedERAReductor):
         dtype = data.dtype
         self._last_sv_U_V = None
         self._rrf = RandomizedRangeFinder(self._H, **rrf_opts)
-        self._rrf.Omega = self._rrf.A.range.make_array(np.empty((0, self._rrf.A.range.dim), dtype=dtype))
+        self._rrf.Omega = self._rrf.A.range.make_array(np.empty((self._rrf.A.range.dim, 0), dtype=dtype))
         self._rrf.estimator_last_basis_size, self.last_estimated_error = 0, np.inf
-        self._rrf.Q = [self._rrf.A.range.make_array(np.empty((0, self._rrf.A.range.dim), dtype=dtype)) for _ in range(self._rrf.power_iterations+1)]
+        self._rrf.Q = [self._rrf.A.range.make_array(np.empty((self._rrf.A.range.dim, 0), dtype=dtype)) for _ in range(self._rrf.power_iterations+1)]
         self._rrf.R = [np.empty((0,0), dtype=dtype) for _ in range(self._rrf.power_iterations+1)]
         self._rrf._draw_samples = self._draw_samples
 
@@ -41,5 +41,5 @@ class RandomizedERAReductor(pyMORRandomizedERAReductor):
         self._rrf.logger.info(f'Taking {num} samples ...')
         dtype = self.data.dtype
         V = np.zeros((self._H._circulant.source.dim, num), dtype=dtype)
-        V[:self._H.source.dim] = self._H.source.random(num, distribution='normal').to_numpy().T
-        return self._H.range.make_array(self._H._circulant._circular_matvec(V)[:, :self._H.range.dim])
+        V[:self._H.source.dim] = self._H.source.random(num, distribution='normal').to_numpy()
+        return self._H.range.make_array(self._H._circulant._circular_matvec(V)[:self._H.range.dim])
