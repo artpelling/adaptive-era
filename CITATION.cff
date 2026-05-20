@@ -1,0 +1,36 @@
+cff-version: 1.2.0
+title: >-
+  Code for Numerical Experiments in "Adaptive reduced order modelling of acoustic LTI
+  systems with input–output dead time"
+message: >-
+  "If you use this software, please cite it using the
+  metadata from this file."
+type: software
+authors:
+  - given-names: "Art J. R."
+    family-names: "Pelling"
+    email: "a.pelling@tu-berlin.de"
+    orcid: "https://orcid.org/0000-0003-3228-6069"
+    affiliation: "Department of Engineering Acoustics, Technische Universität Berlin"
+repository-code: "https://github.com/artpelling/adaptive-era"
+license: "MIT"
+identifiers:
+  - description: "latest version"
+    type: "doi"
+    value: "10.5281/zenodo.15586169"
+preferred-citation:
+  type: article
+  title: Adaptive reduced order modelling of acoustic LTI systems with input–output dead time
+  authors:
+    - given-names: "Art J. R."
+      family-names: "Pelling"
+      email: "a.pelling@tu-berlin.de"
+      orcid: "https://orcid.org/0000-0003-3228-6069"
+      affiliation: "Department of Engineering Acoustics, Technische Universität Berlin"
+    - given-names: "Ennes"
+      family-names: "Sarradj"
+      orcid: "https://orcid.org/0000-0002-0274-8456"
+      affiliation: "Department of Engineering Acoustics, Technische Universität Berlin"
+  journal: "Mechanical Systems and Signal Processing"
+  year: '2026'
+  doi: 10.1016/j.ymssp.2025.113613
