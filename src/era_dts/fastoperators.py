@@ -13,8 +13,8 @@ class NumbaCirculantOperator(NumpyCirculantOperator):
     @staticmethod
     @nb.njit(
         [
-            nb.float32[::1, :](nb.int64, nb.int64, nb.int64, nb.int64, nb.float32[:, ::1], nb.float32[:, ::1], nb.complex64[:, :, ::1]),
-            nb.float64[::1, :](nb.int64, nb.int64, nb.int64, nb.int64, nb.float64[:, ::1], nb.float64[:, ::1], nb.complex128[:, :, ::1])
+            nb.float32[:, ::1](nb.int64, nb.int64, nb.int64, nb.int64, nb.float32[:, ::1], nb.float32[:, ::1], nb.complex64[:, :, ::1]),
+            nb.float64[:, ::1](nb.int64, nb.int64, nb.int64, nb.int64, nb.float64[:, ::1], nb.float64[:, ::1], nb.complex128[:, :, ::1])
         ],
         parallel=True,
         fastmath=True
@@ -29,7 +29,7 @@ class NumbaCirculantOperator(NumpyCirculantOperator):
                 # setting n=n below is necessary to allow uneven lengths but considerably slower
                 # Hankel operator will always pad to even length to avoid that
                 y[i::p] += irfft(Y, n=n, axis=0)[:dim]
-        return y.T
+        return y
 
     @staticmethod
     def _complex_ops(m, p, n, d, vec, y, C):
@@ -40,9 +40,10 @@ class NumbaCirculantOperator(NumpyCirculantOperator):
                 Y = X*C[:, i, j].reshape(-1, 1)
                 Y = ifft(Y, axis=0, overwrite_x=True)
                 y[i::p] += Y[:d // p]
-        return y.T
+        return y
 
     def _circular_matvec(self, vec):
+        vec = np.ascontiguousarray(vec)
         n, p, m = self._arr.shape
         s, k = vec.shape
         d = self.range.dim
@@ -55,14 +56,15 @@ class NumbaCirculantOperator(NumpyCirculantOperator):
         if ismixed:
             l =  s // m - C.shape[0] + 1
             C = np.concatenate([C, C[1:l].conj()[::-1]])
-        C = np.ascontiguousarray(C.T)
-        y = np.zeros((self.range.dim, k), dtype=np.promote_types(self._arr.dtype, vec.dtype))
+        dtype = np.promote_types(self._arr.dtype, vec.dtype)
+        C = np.ascontiguousarray(C.T, dtype=np.complex64 if dtype == np.float32 else np.complex128)
+        y = np.zeros((self.range.dim, k), dtype=dtype)
         return self._real_ops(m, p, n, d, vec, y, C) if isreal else self._complex_ops(m, p, n, d, vec, y, C)
 
 
 class NumbaHankelOperator(NumpyHankelOperator):
-    def __init__(self, c, r=None, name=None):
-        super().__init__(c, r=r, name=name)
+    def __init__(self, c, r=None, solver=None, name=None):
+        super().__init__(c, r=r, solver=solver, name=name)
         k, l = self.c.shape[0], self.r.shape[0]
         n = k + l - 1
         # zero pad to even length if real to avoid slow irfft
