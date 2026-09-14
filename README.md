@@ -72,6 +72,9 @@ pip install .
 
 ## Running the Experiments
 
+> [!IMPORTANT]
+> The latest commit differs slightly from the results reported in the paper. To reproduce the reported results, use the [Zenodo archive](https://doi.org/10.5281/zenodo.15586169). The current implementation fixes the scaling factor in the error estimator and is slightly faster; the results do not change qualitatively.
+
 The individual benchmarks from the paper can be run with the `run-benchmark` entry point, e.g.:
 ``` shell
 run-benchmark -dte DTS MIRD -s SHORT3
