@@ -14,7 +14,9 @@ class NumbaCirculantOperator(NumpyCirculantOperator):
     @nb.njit(
         [
             nb.float32[:, ::1](nb.int64, nb.int64, nb.int64, nb.int64, nb.float32[:, ::1], nb.float32[:, ::1], nb.complex64[:, :, ::1]),
-            nb.float64[:, ::1](nb.int64, nb.int64, nb.int64, nb.int64, nb.float64[:, ::1], nb.float64[:, ::1], nb.complex128[:, :, ::1])
+            nb.float64[:, ::1](nb.int64, nb.int64, nb.int64, nb.int64, nb.float64[:, ::1], nb.float64[:, ::1], nb.complex128[:, :, ::1]),
+            nb.float32[::1, :](nb.int64, nb.int64, nb.int64, nb.int64, nb.float32[::1, :], nb.float32[::1, :], nb.complex64[:, :, ::1]),
+            nb.float64[::1, :](nb.int64, nb.int64, nb.int64, nb.int64, nb.float64[::1, :], nb.float64[::1, :], nb.complex128[:, :, ::1])
         ],
         parallel=True,
         fastmath=True
@@ -42,11 +44,12 @@ class NumbaCirculantOperator(NumpyCirculantOperator):
                 y[i::p] += Y[:d // p]
         return y
 
-    def _circular_matvec(self, vec):
-        vec = np.ascontiguousarray(vec)
+    def _circular_matvec(self, vec, output_dim=None):
         n, p, m = self._arr.shape
         s, k = vec.shape
-        d = self.range.dim
+        d = self.range.dim if output_dim is None else output_dim
+        order = 'F' if vec.flags.f_contiguous and not vec.flags.c_contiguous else 'C'
+        vec = np.asfortranarray(vec) if order == 'F' else np.ascontiguousarray(vec)
 
         # use real arithmetic if possible
         isreal = np.isrealobj(self._arr) and np.isrealobj(vec)
@@ -58,7 +61,7 @@ class NumbaCirculantOperator(NumpyCirculantOperator):
             C = np.concatenate([C, C[1:l].conj()[::-1]])
         dtype = np.promote_types(self._arr.dtype, vec.dtype)
         C = np.ascontiguousarray(C.T, dtype=np.complex64 if dtype == np.float32 else np.complex128)
-        y = np.zeros((self.range.dim, k), dtype=dtype)
+        y = np.zeros((d, k), dtype=dtype, order=order)
         return self._real_ops(m, p, n, d, vec, y, C) if isreal else self._complex_ops(m, p, n, d, vec, y, C)
 
 
@@ -73,6 +76,15 @@ class NumbaHankelOperator(NumpyHankelOperator):
         shift = n // 2 + int(np.ceil((k - l) / 2)) + (n % 2) + z # this works
         self._circulant = NumbaCirculantOperator(
             np.roll(h, shift, axis=0), name=self.name + ' (implicit circulant)')
+
+    def apply(self, U, mu=None):
+        assert U in self.source
+        U = U.to_numpy()
+        n, p, m = self._circulant._arr.shape
+        x = np.zeros((n*m, U.shape[1]), dtype=U.dtype, order='F')
+        for j in range(m):
+            x[:self.source.dim][j::m] = np.flip(U[j::m], axis=0)
+        return self.range.make_array(self._circulant._circular_matvec(x, self.range.dim))
 
     def to_scipy_linear_operator(self):
         def matvec(x):

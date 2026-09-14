@@ -30,16 +30,16 @@ class RandomizedERAReductor(pyMORRandomizedERAReductor):
         self.randomized_svd = RandomizedSVD(
             self._H, power_iterations=power_iterations, low_rank_svd_method='scipy_svd', rrf_args=rrf_args)
         range_finder = self.randomized_svd.range_finder
-        range_finder.Omega = self._H.range.make_array(np.empty((self._H.range.dim, 0), dtype=data.dtype))
-        range_finder.Q = [self._H.range.make_array(np.empty((self._H.range.dim, 0), dtype=data.dtype))
+        range_finder.Omega = self._H.range.make_array(np.empty((self._H.range.dim, 0), dtype=data.dtype, order='F'))
+        range_finder.Q = [self._H.range.make_array(np.empty((self._H.range.dim, 0), dtype=data.dtype, order='F'))
                           for _ in range(power_iterations + 1)]
-        range_finder.R = [np.empty((0, 0), dtype=data.dtype) for _ in range(power_iterations + 1)]
-        self.randomized_svd.B = self._H.source.make_array(np.empty((self._H.source.dim, 0), dtype=data.dtype))
+        range_finder.R = [np.empty((0, 0), dtype=data.dtype, order='F') for _ in range(power_iterations + 1)]
+        self.randomized_svd.B = self._H.source.make_array(np.empty((self._H.source.dim, 0), dtype=data.dtype, order='F'))
         range_finder._draw_samples = self._draw_samples
 
     def _draw_samples(self, num):
         # Faster random samples for Hankel matrices; pyMOR VectorArrays are dim-by-count.
         self.randomized_svd.range_finder.logger.info(f'Taking {num} samples ...')
-        V = np.zeros((self._H._circulant.source.dim, num), dtype=self.data.dtype)
+        V = np.zeros((self._H._circulant.source.dim, num), dtype=self.data.dtype, order='F')
         V[:self._H.source.dim] = self._H.source.random(num, distribution='normal').to_numpy()
-        return self._H.range.make_array(self._H._circulant._circular_matvec(V)[:self._H.range.dim])
+        return self._H.range.make_array(self._H._circulant._circular_matvec(V, self._H.range.dim))
