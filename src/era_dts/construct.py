@@ -21,7 +21,7 @@ set_log_levels({
 
 # COMPUTATIONAL PARAMETERS
 dtype = np.float32
-qr_opts = {'orth_tol': 1e-6, 'maxiter': 10, 'recompute_shift': True}
+qr_opts = {'orth_tol': 1e-6, 'maxiter': 10}
 rrf_args = {'block_size': 5, 'qr_method': 'shifted_chol_qr', 'error_estimator': 'loo', 'qr_opts': qr_opts}
 era_opts = {'force_stability': False, 'power_iterations': 2, 'rrf_args': rrf_args}
 
