@@ -6,6 +6,10 @@ from era_dts.fastoperators import NumbaHankelOperator
 
 from pymor.reductors.era import RandomizedERAReductor as pyMORRandomizedERAReductor
 from pymor.algorithms.rand_la import RandomizedSVD
+from pymor.core.defaults import set_defaults
+
+
+set_defaults({'pymor.bindings.scipy.svd_lapack_driver.driver': 'gesdd'})
 
 
 class RandomizedERAReductor(pyMORRandomizedERAReductor):
