@@ -22,8 +22,8 @@ set_log_levels({
 # COMPUTATIONAL PARAMETERS
 dtype = np.float32
 qr_opts = {'orth_tol': 1e-6, 'maxiter': 10}
-rrf_opts = {'block_size': 5, 'power_iterations': 2, 'qr_method': 'shifted_chol_qr', 'error_estimator': 'loo', 'qr_opts': qr_opts}
-era_opts = {'force_stability': False, 'rrf_opts': rrf_opts}
+rrf_args = {'block_size': 5, 'qr_method': 'shifted_chol_qr', 'error_estimator': 'loo', 'qr_opts': qr_opts}
+era_opts = {'force_stability': False, 'power_iterations': 2, 'rrf_args': rrf_args}
 
 
 def construct(dataset, scenario, dte, tols, model_dir, dist=None):
@@ -52,8 +52,9 @@ def construct(dataset, scenario, dte, tols, model_dir, dist=None):
             orders.append(rom.order)
             hm = impulse_response(rom.with_(T=ir.shape[0]))
             err_true.append(spla.norm(irm-hm))
-            err_est.append(era._rrf.estimate_error()/era._weighted_h2_norm())
-            err_kung.append(era.error_bounds()[-1])
+            error_estimate = era.relative_error_estimate()
+            err_est.append(error_estimate)
+            err_kung.append(np.sqrt(rom.order - 1 + irm.shape[1] + irm.shape[2]) * rom.hsv()[-1])
 
             print(f'order:\t\t\t{orders[-1]}')
             print(f'elapsed time:\t{perf_counter()-tic:.1f} s')
@@ -73,12 +74,12 @@ def construct(dataset, scenario, dte, tols, model_dir, dist=None):
 
             # adapt block size
             if rom.order < 50:
-                era._rrf.block_size = 5
+                era.randomized_svd.range_finder.block_size = 5
             elif rom.order < 100:
-                era._rrf.block_size = 10
+                era.randomized_svd.range_finder.block_size = 10
             elif rom.order < 400:
-                era._rrf.block_size = 50
+                era.randomized_svd.range_finder.block_size = 50
             elif rom.order < 1000:
-                era._rrf.block_size = 100
+                era.randomized_svd.range_finder.block_size = 100
             else:
-                era._rrf.block_size = 250
+                era.randomized_svd.range_finder.block_size = 250
